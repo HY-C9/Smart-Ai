@@ -27,6 +27,22 @@
             background-image: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
         }
     </style>
+
+    <script>
+    // โค้ดยามเฝ้าประตู: เช็คว่ามีบัตรผ่านจากหน้า Login ที่ยังไม่หมดอายุหรือไม่
+    window.addEventListener('DOMContentLoaded', () => {
+        const currentUser = JSON.parse(localStorage.getItem('active_user'));
+        const now = new Date().getTime();
+
+        // ถ้าไม่มีข้อมูลล็อคอิน หรือ เวลาหมดอายุแล้ว ให้เตะกลับไปหน้า Login
+        if (!currentUser || now > currentUser.expireAt) {
+            alert('❌ กรุณาเข้าสู่ระบบก่อนใช้งาน');
+            // ใส่ลิงก์หน้า Login ของคุณตรงนี้ เพื่อให้มันเด้งกลับไป
+            window.location.href = 'https://hy-c9.github.io/Smart-Ai-Login/'; 
+        }
+    });
+</script>
+
 </head>
 <body class="min-h-screen bg-slate-900 text-slate-800 overflow-x-hidden">
 
@@ -40,7 +56,7 @@
                     </div>
                     <div>
                         <div class="text-xs text-slate-400">เข้าสู่ระบบโดย</div>
-                        <div class="text-sm font-bold text-white tracking-wide" id="dash-username">GUEST_USER</div>
+                        <div class="text-sm font-bold text-white tracking-wide" id="dash-username">กำลังโหลด...</div>
                     </div>
                 </div>
 
@@ -186,12 +202,47 @@
     </div>
 
     <script>
-        // ==========================================
-        // 1. ระบบฐานข้อมูลออนไลน์ (Google Sheets API) 
-        // ทำงานเบื้องหลัง ไม่ปิดกั้นการแสดงผลหน้าเว็บ
-        // ==========================================
+        // ----------------------------------------------------
+        // ตั้งค่าลิงก์หน้า Login (อัปเดตเป็นลิงก์ของคุณแล้ว)
+        // ----------------------------------------------------
+        const LOGIN_URL = 'https://hy-c9.github.io/Smart-Ai-Login/';
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzuV8aqMNFhtf9TI-bt9DC59bD9J2-CEfWj4ebHnFpu53gCOBCpcYm1QmyT6d1F70Lx/exec';
+        
         let globalUsers = []; 
+        let timerInterval; 
+
+        // ==========================================
+        // 1. ระบบด่านตรวจคนเข้าเมือง (Security Gate)
+        // ==========================================
+        window.onload = () => {
+            const currentUser = JSON.parse(localStorage.getItem('active_user'));
+            const lastActiveDay = localStorage.getItem('last_active_day');
+            const todayDate = new Date().toDateString();
+
+            // 1.1 ถ้าไม่มีข้อมูลล็อคอิน ให้เตะกลับไปหน้า Login ทันทีแบบไม่ให้มีร่องรอยการกด Back
+            if (!currentUser) {
+                window.location.replace(LOGIN_URL);
+                return;
+            }
+
+            // 1.2 ถ้ามีข้อมูล แต่พบว่า "ข้ามวันใหม่แล้ว" ให้บังคับล็อคอินใหม่
+            if (lastActiveDay && lastActiveDay !== todayDate) {
+                alert("สิ้นสุดการใช้งานของวันนี้ กรุณาเข้าสู่ระบบใหม่");
+                logoutUser();
+                return;
+            }
+
+            // ถ้าผ่านด่าน ให้จำวันที่ล่าสุดไว้
+            localStorage.setItem('last_active_day', todayDate);
+
+            // แสดงชื่อและเริ่มระบบ
+            document.getElementById('dash-username').textContent = currentUser.username;
+            document.getElementById('dash-expire-date').textContent = formatDate(currentUser.expireAt);
+            
+            DatabaseAPI.init(); // โหลดข้อมูล Google Sheets พื้นหลัง
+            startTimer();
+            switchSystemMode('makeup'); // ตั้งหน้าแรก
+        };
 
         const DatabaseAPI = {
             init: async () => {
@@ -206,97 +257,90 @@
             getUsers: () => globalUsers
         };
 
-        let timerInterval; 
-
         // ==========================================
-        // 2. ฟังก์ชันนับเวลาถอยหลัง (Timer)
+        // 2. ระบบ AI เวลาอัจฉริยะ (Smart Time Tracking)
         // ==========================================
         function startTimer() {
             clearInterval(timerInterval);
             timerInterval = setInterval(() => {
                 const currentUser = JSON.parse(localStorage.getItem('active_user'));
-                if (!currentUser) { 
-                    document.getElementById('dash-countdown').textContent = "กรุณาเข้าสู่ระบบ";
-                    clearInterval(timerInterval); 
-                    return; 
+                if (!currentUser) return;
+
+                // เช็คว่าข้ามวันหรือยังขณะที่เปิดเว็บทิ้งไว้?
+                const todayDate = new Date().toDateString();
+                const lastActiveDay = localStorage.getItem('last_active_day');
+                if (lastActiveDay && lastActiveDay !== todayDate) {
+                    alert("สิ้นสุดการใช้งานของวันนี้ กรุณาเข้าสู่ระบบใหม่");
+                    logoutUser();
+                    return;
                 }
 
-                // ดึงข้อมูลล่าสุดจาก Google Sheets (ถ้าโหลดเสร็จแล้ว)
+                // ดึงข้อมูลอัปเดตจาก Database
                 const dbUsers = DatabaseAPI.getUsers();
                 let realUserData = currentUser;
 
                 if (dbUsers.length > 0) {
                     const foundUser = dbUsers.find(u => u.username === currentUser.username);
                     if (!foundUser) {
-                        clearInterval(timerInterval);
-                        logoutUser();
                         alert("บัญชีของคุณถูกลบออกจากระบบ");
+                        logoutUser();
                         return;
                     }
                     realUserData = foundUser;
                 }
 
+                // คำนวณเวลาที่เหลือ
                 const now = new Date().getTime();
                 const diff = realUserData.expireAt - now;
 
                 if (diff <= 0) {
-                    clearInterval(timerInterval);
-                    document.getElementById('dash-countdown').textContent = "หมดอายุแล้ว";
-                    document.getElementById('dash-countdown').className = "text-sm font-bold font-mono text-red-500";
+                    document.getElementById('dash-countdown').textContent = "หมดเวลาการใช้งาน";
+                    document.getElementById('dash-countdown').className = "text-sm font-bold font-mono text-red-500 animate-pulse";
                     alert("เวลาการใช้งานของคุณหมดแล้ว กรุณาติดต่อผู้ดูแลระบบ");
                     logoutUser();
                     return;
                 }
 
-                // คำนวณวัน ชั่วโมง นาที ที่เหลืออยู่
+                // ระบบแสดงเวลาให้ฉลาดขึ้น (Days, Hours, Minutes, Seconds)
                 const days = Math.floor(diff / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
                 
-                let timeString = `${days} วัน`;
-                if(days === 0) timeString = `${hours} ชม. ${minutes} นาที`;
+                let timeString = '';
+                if (days > 0) {
+                    timeString = `${days} วัน ${hours} ชม.`;
+                } else if (hours > 0) {
+                    timeString = `${hours} ชม. ${minutes} นาที`;
+                } else {
+                    timeString = `${minutes} นาที ${seconds} วินาที`;
+                }
 
                 document.getElementById('dash-countdown').textContent = timeString;
                 localStorage.setItem('active_user', JSON.stringify(realUserData));
             }, 1000); 
         }
 
-        // โหลดข้อมูลเมื่อเปิดหน้าเว็บทันที
-        window.onload = () => {
-            // สั่งโหลดฐานข้อมูลเบื้องหลัง
-            DatabaseAPI.init();
-
-            // ดึงข้อมูลผู้ใช้จาก LocalStorage มาแสดงผลก่อนเลย
-            const currentUser = JSON.parse(localStorage.getItem('active_user'));
-            if (currentUser) {
-                document.getElementById('dash-username').textContent = currentUser.username;
-                document.getElementById('dash-expire-date').textContent = formatDate(currentUser.expireAt);
-                startTimer();
-            } else {
-                // ถ้ายังไม่ได้ล็อคอิน ให้เด้งไปหน้า login (ถ้ามี) หรือแสดงข้อความแจ้งเตือน
-                document.getElementById('dash-username').textContent = "ยังไม่ได้เข้าสู่ระบบ";
-                document.getElementById('dash-expire-date').textContent = "-";
-                document.getElementById('dash-countdown').textContent = "กรุณาเข้าสู่ระบบ";
-                // window.location.href = 'login.html'; // หากต้องการให้เด้งไปหน้าล็อคอิน ให้ลบคอมเมนต์บรรทัดนี้ออก
-            }
-
-            // ตั้งค่าหน้าเริ่มต้นเป็น 'makeup' (AI SMART CONTRACT)
-            switchSystemMode('makeup');
-        };
+        // ==========================================
+        // 3. ฟังก์ชันออกจากระบบ (Logout)
+        // ==========================================
+        function logoutUser() {
+            // ล้างข้อมูลทุกอย่างให้เกลี้ยง
+            localStorage.removeItem('active_user');
+            localStorage.removeItem('last_active_day');
+            clearInterval(timerInterval);
+            
+            // เตะกลับไปหน้า Login ทันทีแบบไม่บันทึกประวัติกลับ
+            window.location.replace(LOGIN_URL); 
+        }
 
         function formatDate(timestamp) {
             const d = new Date(timestamp);
             return `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()}  ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
         }
 
-        function logoutUser() {
-            localStorage.removeItem('active_user');
-            clearInterval(timerInterval);
-            window.location.href = 'login.html'; // ลิงก์ไปหน้าล็อคอิน
-        }
-
         // ==========================================
-        // 3. ตัวแปรและฟังก์ชันจัดการระบบ UI เมนู
+        // 4. UI เมนู และ รายการ
         // ==========================================
         let currentVerificationModeIsSuccess = true; 
         let currentActionName = '';
@@ -347,13 +391,8 @@
             const grid = document.getElementById('dashboard-grid');
             grid.innerHTML = '';
             
-            // ------------------------------------
-            // หมวดหมู่ "รายการเอกสาร"
-            // ------------------------------------
             if (currentSystemMode === 'document') {
                 grid.className = "grid grid-cols-1 md:grid-cols-2 gap-4"; 
-                
-                // คืนชีพ 10 รายการกลับมาแล้วครับ!
                 const docItems = [
                     { name: "เอกสารขยายเวลา", img: imgMakeup, link: "ใส่ลิงก์ของคุณที่นี่_1" },
                     { name: "เอกสารขยายเวลา", img: imgSmartContract, link: "ใส่ลิงก์ของคุณที่นี่_2" },
@@ -390,10 +429,7 @@
                 return;
             }
 
-            // ------------------------------------
-            // หมวดหมู่ AI SMART CONTRACT (ปรับให้เป็น 2 คอลัมน์เหมือนในรูป)
-            // ------------------------------------
-            grid.className = "grid grid-cols-1 md:grid-cols-2 gap-4"; // 2 คอลัมน์
+            grid.className = "grid grid-cols-1 md:grid-cols-2 gap-4"; 
             const displayImage = (currentSystemMode === 'smart') ? imgSmartContract : imgMakeup;
 
             menuItems.forEach((item) => {
@@ -420,7 +456,7 @@
         }
 
         // ==========================================
-        // 4. ระบบกดตรวจสอบ Slip
+        // 5. ระบบกดตรวจสอบ Slip
         // ==========================================
         function openVerification(status, actionTitle) {
             currentVerificationModeIsSuccess = (status === '✅');
