@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise System</title>
+    <title>Enterprise System - Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
@@ -26,145 +26,12 @@
             background-color: #0f172a;
             background-image: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
         }
-
-        #initial-loader { transition: opacity 0.5s; }
-        
     </style>
-<body>
 </head>
 <body class="min-h-screen bg-slate-900 text-slate-800 overflow-x-hidden">
 
-    <div id="initial-loader" class="fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center justify-center">
-        <svg class="animate-spin h-10 w-10 text-[#0F767D] mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-        <p class="text-slate-400 text-sm font-medium animate-pulse">กำลังโหลด.....</p>
-    </div>
-
-    <div id="state-login" class="hidden fixed inset-0 z-50 flex items-center justify-center px-4 fade-in bg-[#0f172a]">
-        <div class="absolute inset-0 overflow-hidden z-0 pointer-events-none">
-            <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-[#0F767D]/20 rounded-full blur-[120px]"></div>
-            <div class="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px]"></div>
-        </div>
-
-        <div class="bg-slate-900/80 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-[400px] p-10 flex flex-col items-center pop-up border border-slate-700/50 relative z-10">
-            <div class="w-20 h-20 bg-gradient-to-br from-[#0F767D] to-slate-800 rounded-2xl flex items-center justify-center mb-6 shadow-lg transform rotate-3 border border-slate-600">
-                <svg class="w-10 h-10 text-white transform -rotate-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-            </div>
-            <h2 class="text-3xl font-bold text-white mb-1 tracking-tight">SYSTEM LOGIN</h2>
-            <p class="text-xs text-slate-400 mb-8 text-center uppercase tracking-widest">Enterprise Smart Contract</p>
-
-            <form id="login-form" class="w-full space-y-5">
-                <div>
-                    <label class="block text-[11px] font-semibold text-slate-400 mb-1.5 tracking-wider uppercase">Username / ID</label>
-                    <input type="text" id="login-username" required placeholder="Enter your ID" class="w-full px-4 py-3.5 bg-slate-800/50 border border-slate-700 rounded-xl focus:ring-2 focus:ring-[#0F767D] focus:border-transparent outline-none text-white text-sm transition-all placeholder-slate-600">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-semibold text-slate-400 mb-1.5 tracking-wider uppercase">Password</label>
-                    <input type="password" id="login-password" required placeholder="••••••••" class="w-full px-4 py-3.5 bg-slate-800/50 border border-slate-700 rounded-xl focus:ring-2 focus:ring-[#0F767D] focus:border-transparent outline-none text-white text-sm transition-all placeholder-slate-600">
-                </div>
-                
-                <div id="login-error" class="hidden text-red-400 text-xs font-medium text-center bg-red-500/10 p-3 rounded-lg border border-red-500/20"></div>
-
-                <button type="submit" class="w-full mt-2 py-3.5 rounded-xl bg-gradient-to-r from-[#0F767D] to-[#0a4f54] hover:from-[#0c5e64] hover:to-[#083b3f] text-white text-sm font-bold transition-all shadow-[0_0_20px_rgba(15,118,125,0.3)] hover:shadow-[0_0_25px_rgba(15,118,125,0.5)] active:scale-[0.98]">
-                    เข้าสู่ระบบ
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <div id="state-admin" class="hidden fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/95 px-4 fade-in">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden pop-up">
-            
-            <div class="bg-slate-900 px-6 py-4 flex justify-between items-center text-white">
-                <div class="flex items-center gap-3">
-                    <svg class="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                    <h2 class="font-bold tracking-wide">ADMINISTRATOR</h2>
-                </div>
-                <button onclick="logoutAdmin()" class="text-sm bg-red-500 hover:bg-red-600 px-3 py-1.5 rounded transition-colors font-semibold">ออกจากระบบแอดมิน</button>
-            </div>
-
-            <div class="p-6 overflow-y-auto flex-1 bg-slate-50">
-                <div class="bg-white p-5 rounded-xl border border-slate-200 mb-6 shadow-sm">
-                    <h3 class="text-sm font-bold text-slate-800 mb-4 border-b pb-2">➕ สร้าง License ใหม่</h3>
-                    <form id="add-user-form" class="grid grid-cols-1 sm:grid-cols-5 gap-4 items-end">
-                        <div class="sm:col-span-1">
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Username</label>
-                            <input type="text" id="new-user" required class="w-full px-3 py-2 border rounded text-sm outline-none focus:border-[#0F767D]">
-                        </div>
-                        <div class="sm:col-span-1">
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Password</label>
-                            <input type="text" id="new-pass" required class="w-full px-3 py-2 border rounded text-sm outline-none focus:border-[#0F767D]">
-                        </div>
-                        <div class="sm:col-span-1">
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">จำนวนเวลา</label>
-                            <input type="number" id="new-duration" min="1" value="1" required class="w-full px-3 py-2 border rounded text-sm outline-none focus:border-[#0F767D]">
-                        </div>
-                        <div class="sm:col-span-1">
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">หน่วยเวลา</label>
-                            <select id="new-unit" class="w-full px-3 py-2 border rounded text-sm outline-none focus:border-[#0F767D] bg-white">
-                                <option value="minutes">นาที</option>
-                                <option value="hours">ชั่วโมง</option>
-                                <option value="days">วัน</option>
-                                <option value="months">เดือน</option>
-                                <option value="years">ปี</option>
-                            </select>
-                        </div>
-                        <div class="sm:col-span-1">
-                            <button type="submit" class="w-full py-2 bg-[#006A60] hover:bg-[#00554D] text-white rounded text-sm font-semibold transition-colors">เพิ่มสิทธิ์</button>
-                        </div>
-                    </form>
-                </div>
-
-                <h3 class="text-sm font-bold text-slate-800 mb-3">📋 รายชื่อผู้ใช้งานในระบบ</h3>
-                <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
-                    <table class="w-full text-left text-sm whitespace-nowrap">
-                        <thead class="bg-slate-100 text-slate-600 border-b border-slate-200">
-                            <tr>
-                                <th class="px-4 py-3 font-semibold">Username</th>
-                                <th class="px-4 py-3 font-semibold">Password</th>
-                                <th class="px-4 py-3 font-semibold">วันหมดอายุ</th>
-                                <th class="px-4 py-3 font-semibold">สถานะ</th>
-                                <th class="px-4 py-3 font-semibold text-center">จัดการ</th>
-                            </tr>
-                        </thead>
-                        <tbody id="user-table-body" class="divide-y divide-slate-100"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="extend-overlay" class="hidden fixed inset-0 z-[80] flex items-center justify-center bg-slate-900/80 backdrop-blur-sm px-4 fade-in">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-[320px] p-6 flex flex-col pop-up">
-            <h3 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">⏱️ จัดการเวลาใช้งาน</h3>
-            <p class="text-sm text-slate-600 mb-4">บัญชีผู้ใช้: <span id="extend-username-display" class="font-bold text-[#0F767D]"></span></p>
-            
-            <form id="extend-form" class="space-y-4">
-                <input type="hidden" id="extend-username">
-                <div class="flex gap-2">
-                    <div class="w-1/2">
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">จำนวน (ใส่ลบเพื่อหักเวลา)</label>
-                        <input type="number" id="extend-duration" value="1" required class="w-full px-3 py-2 border rounded text-sm outline-none focus:border-[#0F767D]">
-                    </div>
-                    <div class="w-1/2">
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">หน่วยเวลา</label>
-                        <select id="extend-unit" class="w-full px-3 py-2 border rounded text-sm outline-none focus:border-[#0F767D] bg-white">
-                            <option value="minutes">นาที</option>
-                            <option value="hours">ชั่วโมง</option>
-                            <option value="days">วัน</option>
-                            <option value="months">เดือน</option>
-                            <option value="years">ปี</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="flex gap-2 mt-4 pt-2">
-                    <button type="button" onclick="closeExtendModal()" class="w-1/2 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded text-sm font-semibold transition-colors">ยกเลิก</button>
-                    <button type="submit" class="w-1/2 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-sm font-semibold transition-colors">ยืนยัน</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div id="state-dashboard" class="hidden min-h-screen w-full bg-dashboard flex-col md:flex-row">
+    <div id="state-dashboard" class="flex min-h-screen w-full bg-dashboard flex-col md:flex-row fade-in">
+        
         <div class="w-full md:w-64 bg-slate-800 border-b md:border-b-0 md:border-r border-slate-700 flex flex-col shrink-0 shadow-2xl relative z-20">
             <div class="p-5 border-b border-slate-700 bg-slate-900/50">
                 <div class="flex items-center gap-3 mb-4">
@@ -173,7 +40,7 @@
                     </div>
                     <div>
                         <div class="text-xs text-slate-400">เข้าสู่ระบบโดย</div>
-                        <div class="text-sm font-bold text-white tracking-wide" id="dash-username">USER01</div>
+                        <div class="text-sm font-bold text-white tracking-wide" id="dash-username">GUEST_USER</div>
                     </div>
                 </div>
 
@@ -183,19 +50,18 @@
                         <span class="text-xs font-semibold text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded">สถานะ: ปกติ</span>
                     </div>
                     <div class="text-[10px] text-slate-400 mb-0.5"> วันหมดอายุ:</div>
-                    <div class="text-xs font-mono text-white mb-2" id="dash-expire-date">-</div>
+                    <div class="text-xs font-mono text-white mb-2" id="dash-expire-date">ตรวจสอบข้อมูล...</div>
 
                     <div class="text-[10px] text-slate-400 mb-0.5"> เหลือเวลา:</div>
                     <div class="text-sm font-bold font-mono text-yellow-400" id="dash-countdown">คำนวณ...</div>
                 </div>
 
-                <button onclick="alert('ติดต่อ นิ่เก่อ เพื่อต่ออายุครับ')" class="w-full mt-3 py-2 rounded bg-slate-700 hover:bg-slate-600 border border-slate-600 text-white text-xs font-medium transition-colors">
+                <button onclick="alert('ติดต่อผู้ดูแลระบบ เพื่อต่ออายุครับ')" class="w-full mt-3 py-2 rounded bg-slate-700 hover:bg-slate-600 border border-slate-600 text-white text-xs font-medium transition-colors">
                     + ต่ออายุการใช้งาน
                 </button>
             </div>
 
             <div class="p-4 border-b border-slate-700/50 space-y-2">
-                
                 <button id="btn-mode-makeup" onclick="switchSystemMode('makeup')" class="w-full flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-slate-700/60 transition-all cursor-pointer border border-transparent hover:border-slate-600 group bg-slate-700 border-slate-500">
                     <div class="w-11 h-11 bg-white rounded-lg p-0.5 shadow-md flex-shrink-0 overflow-hidden">
                         <img src="https://img5.pic.in.th/file/secure-sv1/imagef24e02695c33e0c7.md.png" class="w-full h-full object-cover rounded-[6px] group-hover:scale-110 transition-transform duration-300">
@@ -216,9 +82,8 @@
                     </div>
                     <span class="text-white font-bold text-[13px] tracking-wide text-left">รายการเอกสาร</span>
                 </button>
-
             </div>
-
+            
             <div class="p-4 mt-auto">
                 <button onclick="logoutUser()" class="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-red-500 hover:bg-red-600 text-white text-sm font-bold transition-all shadow-lg">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
@@ -228,11 +93,10 @@
         </div>
 
         <div class="flex-1 p-4 md:p-8 h-screen overflow-y-auto">
-            <h2 id="dashboard-header-title" class="text-xl font-bold text-white mb-6">เลือกระบบที่ต้องการดำเนินการ</h2>
+            <h2 id="dashboard-header-title" class="text-xl md:text-2xl font-bold text-white mb-6 md:mb-8 tracking-wide">เลือกระบบที่ต้องการดำเนินการ</h2>
             <div id="dashboard-grid"></div>
         </div>
     </div>
-
 
     <div id="state-verification" class="hidden min-h-screen w-full flex-col items-center justify-center bg-[url('https://img5.pic.in.th/file/secure-sv1/imageea7a80c79f76072e.md.png')] bg-cover bg-center bg-no-repeat bg-fixed relative">
         <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-md z-0"></div>
@@ -278,7 +142,6 @@
                         </button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
@@ -324,7 +187,8 @@
 
     <script>
         // ==========================================
-        // 1. ระบบฐานข้อมูลออนไลน์ (Google Sheets API)
+        // 1. ระบบฐานข้อมูลออนไลน์ (Google Sheets API) 
+        // ทำงานเบื้องหลัง ไม่ปิดกั้นการแสดงผลหน้าเว็บ
         // ==========================================
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzuV8aqMNFhtf9TI-bt9DC59bD9J2-CEfWj4ebHnFpu53gCOBCpcYm1QmyT6d1F70Lx/exec';
         let globalUsers = []; 
@@ -339,79 +203,25 @@
                     globalUsers = [];
                 }
             },
-            getUsers: () => globalUsers,
-            
-            addUser: async (userObj) => {
-                globalUsers.push(userObj);
-                try {
-                    await fetch(WEB_APP_URL, {
-                        method: 'POST',
-                        body: JSON.stringify({ action: 'addUser', payload: userObj })
-                    });
-                } catch(e) { console.error(e); }
-            },
-            updateUser: async (username, updatedData) => {
-                const index = globalUsers.findIndex(u => u.username === username);
-                if(index > -1) {
-                    globalUsers[index] = { ...globalUsers[index], ...updatedData };
-                    try {
-                        await fetch(WEB_APP_URL, {
-                            method: 'POST',
-                            body: JSON.stringify({ action: 'updateUser', payload: { username: username, expireAt: globalUsers[index].expireAt } })
-                        });
-                    } catch(e) { console.error(e); }
-                }
-            },
-            deleteUser: async (username) => {
-                globalUsers = globalUsers.filter(u => u.username !== username);
-                try {
-                    await fetch(WEB_APP_URL, {
-                        method: 'POST',
-                        body: JSON.stringify({ action: 'deleteUser', payload: { username: username } })
-                    });
-                } catch(e) { console.error(e); }
-            }
+            getUsers: () => globalUsers
         };
 
-        window.onload = async () => {
-            Promise.race([
-                DatabaseAPI.init(),
-                new Promise(resolve => setTimeout(resolve, 2000))
-            ]).finally(() => {
-                document.getElementById('initial-loader').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('initial-loader').classList.add('hidden');
-                    
-                    if(!checkSession()) {
-                        document.getElementById('state-login').classList.remove('hidden');
-                    }
-                    
-                    renderAdminTable(); 
-                }, 500);
-            });
-        };
-
-        // ==========================================
-        // 2. ตัวแปรและฟังก์ชันระบบหลัก
-        // ==========================================
-        const ADMIN_USER = 'admin';
-        const ADMIN_PASS = '304152';
         let timerInterval; 
-        let currentVerificationModeIsSuccess = true; 
-        let currentActionName = '';
-        let currentSystemMode = 'makeup'; // 'makeup', 'smart', หรือ 'document'
 
-        const stateLogin = document.getElementById('state-login');
-        const stateAdmin = document.getElementById('state-admin');
-        const stateDashboard = document.getElementById('state-dashboard');
-        const stateVerification = document.getElementById('state-verification');
-        
+        // ==========================================
+        // 2. ฟังก์ชันนับเวลาถอยหลัง (Timer)
+        // ==========================================
         function startTimer() {
             clearInterval(timerInterval);
             timerInterval = setInterval(() => {
                 const currentUser = JSON.parse(localStorage.getItem('active_user'));
-                if (!currentUser) { clearInterval(timerInterval); return; }
+                if (!currentUser) { 
+                    document.getElementById('dash-countdown').textContent = "กรุณาเข้าสู่ระบบ";
+                    clearInterval(timerInterval); 
+                    return; 
+                }
 
+                // ดึงข้อมูลล่าสุดจาก Google Sheets (ถ้าโหลดเสร็จแล้ว)
                 const dbUsers = DatabaseAPI.getUsers();
                 let realUserData = currentUser;
 
@@ -431,193 +241,70 @@
 
                 if (diff <= 0) {
                     clearInterval(timerInterval);
-                    alert("เวลาการใช้งานของคุณหมดแล้ว กรุณาติดต่อต่ออายุ");
+                    document.getElementById('dash-countdown').textContent = "หมดอายุแล้ว";
+                    document.getElementById('dash-countdown').className = "text-sm font-bold font-mono text-red-500";
+                    alert("เวลาการใช้งานของคุณหมดแล้ว กรุณาติดต่อผู้ดูแลระบบ");
                     logoutUser();
                     return;
                 }
 
+                // คำนวณวัน ชั่วโมง นาที ที่เหลืออยู่
                 const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                
                 let timeString = `${days} วัน`;
+                if(days === 0) timeString = `${hours} ชม. ${minutes} นาที`;
+
                 document.getElementById('dash-countdown').textContent = timeString;
                 localStorage.setItem('active_user', JSON.stringify(realUserData));
             }, 1000); 
         }
 
-        function checkSession() {
+        // โหลดข้อมูลเมื่อเปิดหน้าเว็บทันที
+        window.onload = () => {
+            // สั่งโหลดฐานข้อมูลเบื้องหลัง
+            DatabaseAPI.init();
+
+            // ดึงข้อมูลผู้ใช้จาก LocalStorage มาแสดงผลก่อนเลย
             const currentUser = JSON.parse(localStorage.getItem('active_user'));
             if (currentUser) {
-                if (new Date().getTime() > currentUser.expireAt) {
-                    localStorage.removeItem('active_user');
-                    return false;
-                }
-                const dbUsers = DatabaseAPI.getUsers();
-                if (dbUsers.length > 0) {
-                    const realUser = dbUsers.find(u => u.username === currentUser.username);
-                    if (realUser && new Date().getTime() <= realUser.expireAt) {
-                        showDashboard(realUser);
-                        return true;
-                    } else {
-                        localStorage.removeItem('active_user');
-                        return false;
-                    }
-                } else {
-                    showDashboard(currentUser);
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        document.getElementById('login-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const user = document.getElementById('login-username').value.trim();
-            const pass = document.getElementById('login-password').value.trim();
-            document.getElementById('login-error').classList.add('hidden');
-
-            if (user === ADMIN_USER && pass === ADMIN_PASS) {
-                document.getElementById('login-form').reset();
-                renderAdminTable();
-                stateAdmin.classList.remove('hidden');
-                return;
-            }
-
-            const dbUsers = DatabaseAPI.getUsers();
-            const foundUser = dbUsers.find(u => u.username === user && u.password === pass);
-            if (foundUser) {
-                if (new Date().getTime() > foundUser.expireAt) {
-                    document.getElementById('login-error').textContent = "❌ สิทธิ์การใช้งานหมดอายุ! กรุณาติดต่อผู้ดูแลระบบ";
-                    document.getElementById('login-error').classList.remove('hidden');
-                } else {
-                    localStorage.setItem('active_user', JSON.stringify(foundUser));
-                    document.getElementById('login-form').reset();
-                    showDashboard(foundUser);
-                }
+                document.getElementById('dash-username').textContent = currentUser.username;
+                document.getElementById('dash-expire-date').textContent = formatDate(currentUser.expireAt);
+                startTimer();
             } else {
-                document.getElementById('login-error').textContent = "⚠️ Username หรือ Password ไม่ถูกต้อง";
-                document.getElementById('login-error').classList.remove('hidden');
+                // ถ้ายังไม่ได้ล็อคอิน ให้เด้งไปหน้า login (ถ้ามี) หรือแสดงข้อความแจ้งเตือน
+                document.getElementById('dash-username').textContent = "ยังไม่ได้เข้าสู่ระบบ";
+                document.getElementById('dash-expire-date').textContent = "-";
+                document.getElementById('dash-countdown').textContent = "กรุณาเข้าสู่ระบบ";
+                // window.location.href = 'login.html'; // หากต้องการให้เด้งไปหน้าล็อคอิน ให้ลบคอมเมนต์บรรทัดนี้ออก
             }
-        });
 
-        function logoutUser() {
-            localStorage.removeItem('active_user');
-            clearInterval(timerInterval);
-            stateDashboard.classList.add('hidden');
-            stateDashboard.classList.remove('flex');
-            stateVerification.classList.add('hidden');
-            stateVerification.classList.remove('flex');
-            stateLogin.classList.remove('hidden');
-        }
+            // ตั้งค่าหน้าเริ่มต้นเป็น 'makeup' (AI SMART CONTRACT)
+            switchSystemMode('makeup');
+        };
 
-        function logoutAdmin() {
-            stateAdmin.classList.add('hidden');
-        }
-
-        // ================= 3. ระบบ ADMIN (หลังบ้าน) =================
         function formatDate(timestamp) {
             const d = new Date(timestamp);
             return `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()}  ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
         }
 
-        function getCalculatedMs(value, unit) {
-            let ms = 0;
-            if (unit === 'minutes') ms = value * 60 * 1000;
-            if (unit === 'hours') ms = value * 60 * 60 * 1000;
-            if (unit === 'days') ms = value * 24 * 60 * 60 * 1000;
-            if (unit === 'months') ms = value * 30 * 24 * 60 * 60 * 1000;
-            if (unit === 'years') ms = value * 365 * 24 * 60 * 60 * 1000;
-            return ms;
+        function logoutUser() {
+            localStorage.removeItem('active_user');
+            clearInterval(timerInterval);
+            window.location.href = 'login.html'; // ลิงก์ไปหน้าล็อคอิน
         }
 
-        document.getElementById('add-user-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const uName = document.getElementById('new-user').value.trim();
-            const uPass = document.getElementById('new-pass').value.trim();
-            const dur = parseInt(document.getElementById('new-duration').value);
-            const unit = document.getElementById('new-unit').value;
+        // ==========================================
+        // 3. ตัวแปรและฟังก์ชันจัดการระบบ UI เมนู
+        // ==========================================
+        let currentVerificationModeIsSuccess = true; 
+        let currentActionName = '';
+        let currentSystemMode = 'makeup'; 
 
-            const dbUsers = DatabaseAPI.getUsers();
-            if (dbUsers.some(u => u.username === uName)) return alert('Username นี้มีในระบบแล้ว!');
+        const stateDashboard = document.getElementById('state-dashboard');
+        const stateVerification = document.getElementById('state-verification');
 
-            let expireTime = new Date().getTime() + getCalculatedMs(dur, unit);
-            await DatabaseAPI.addUser({ username: uName, password: uPass, expireAt: expireTime });
-            
-            document.getElementById('add-user-form').reset();
-            renderAdminTable();
-        });
-
-        function openExtendModal(username) {
-            document.getElementById('extend-username-display').textContent = username;
-            document.getElementById('extend-username').value = username;
-            document.getElementById('extend-overlay').classList.remove('hidden');
-        }
-        function closeExtendModal() {
-            document.getElementById('extend-overlay').classList.add('hidden');
-            document.getElementById('extend-form').reset();
-        }
-
-        document.getElementById('extend-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const username = document.getElementById('extend-username').value;
-            const dur = parseInt(document.getElementById('extend-duration').value);
-            const unit = document.getElementById('extend-unit').value;
-
-            const dbUsers = DatabaseAPI.getUsers();
-            const targetUser = dbUsers.find(u => u.username === username);
-            
-            if(targetUser) {
-                const msToAddOrSub = getCalculatedMs(dur, unit);
-                const now = new Date().getTime();
-                let newExpire = targetUser.expireAt;
-                
-                if (dur > 0 && newExpire < now) {
-                    newExpire = now + msToAddOrSub;
-                } else {
-                    newExpire += msToAddOrSub;
-                }
-                
-                await DatabaseAPI.updateUser(username, { expireAt: newExpire });
-                renderAdminTable();
-                alert(`จัดการเวลาให้ ${username} สำเร็จ!`);
-                closeExtendModal();
-            }
-        });
-
-        async function deleteUser(username) {
-            if(confirm(`ยืนยันการลบ ${username} ?`)) {
-                await DatabaseAPI.deleteUser(username);
-                renderAdminTable();
-            }
-        }
-
-        function renderAdminTable() {
-            const tbody = document.getElementById('user-table-body');
-            tbody.innerHTML = '';
-            const dbUsers = DatabaseAPI.getUsers();
-            const now = new Date().getTime();
-            if(dbUsers.length === 0) return tbody.innerHTML = `<tr><td colspan="5" class="text-center py-6">ไม่มีข้อมูล</td></tr>`;
-            
-            dbUsers.forEach(u => {
-                const isExpired = now > u.expireAt;
-                const statusHtml = isExpired 
-                    ? `<span class="px-2 py-1 bg-red-100 text-red-700 text-[10px] font-bold rounded">หมดอายุ</span>`
-                    : `<span class="px-2 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-bold rounded">ใช้งานได้</span>`;
-                
-                tbody.innerHTML += `
-                    <tr class="hover:bg-slate-50">
-                        <td class="px-4 py-3 font-medium text-slate-800">${u.username}</td>
-                        <td class="px-4 py-3 text-slate-500 font-mono text-xs">${u.password}</td>
-                        <td class="px-4 py-3 text-slate-600 text-xs">${formatDate(u.expireAt)}</td>
-                        <td class="px-4 py-3">${statusHtml}</td>
-                        <td class="px-4 py-3 text-center flex justify-center gap-2">
-                            <button onclick="openExtendModal('${u.username}')" class="text-emerald-600 hover:text-emerald-800 text-xs font-semibold bg-emerald-50 px-2 py-1 rounded border border-emerald-200">จัดการเวลา</button>
-                            <button onclick="deleteUser('${u.username}')" class="text-red-500 hover:text-red-700 text-xs font-semibold bg-red-50 px-2 py-1 rounded border border-red-200">ลบ</button>
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-
-        // ================= 4. DASHBOARD & ROUTING =================
         const imgMakeup = "https://img5.pic.in.th/file/secure-sv1/imagef24e02695c33e0c7.md.png";
         const imgSmartContract = "https://img5.pic.in.th/file/secure-sv1/photo_--_--98bf3ff2cc85b3bd.md.jpg";
 
@@ -629,7 +316,6 @@
             { name: "ถอนเกินเวลา.", status: "✅" }, { name: "ถอนเกินเวลา.", status: "❌" }
         ];
 
-        // ฟังก์ชันสลับโหมด พอกดที่เมนูซ้าย จะเปลี่ยนสถานะปุ่มและโหลดตารางใหม่
         function switchSystemMode(mode) {
             currentSystemMode = mode;
             
@@ -637,12 +323,10 @@
             const btnSmart = document.getElementById('btn-mode-smart');
             const btnDocument = document.getElementById('btn-mode-document');
 
-            // ลบสีปุ่มที่ถูกเลือกออกก่อนทั้งหมด
             [btnMakeup, btnSmart, btnDocument].forEach(btn => {
                 if(btn) btn.classList.remove('bg-slate-700', 'border-slate-500');
             });
 
-            // ไฮไลต์ปุ่มที่กำลังเลือก
             if(mode === 'makeup') {
                 if(btnMakeup) btnMakeup.classList.add('bg-slate-700', 'border-slate-500');
             } else if (mode === 'smart') {
@@ -651,7 +335,6 @@
                 if(btnDocument) btnDocument.classList.add('bg-slate-700', 'border-slate-500');
             }
 
-            // เปลี่ยนข้อความหัวข้อ
             const headerTitle = document.getElementById('dashboard-header-title');
             if(headerTitle) {
                 headerTitle.textContent = mode === 'document' ? "รายการเอกสารของระบบ" : "เลือกระบบที่ต้องการดำเนินการ";
@@ -665,42 +348,41 @@
             grid.innerHTML = '';
             
             // ------------------------------------
-            // ถ้าเลือกหมวด "รายการเอกสาร"
+            // หมวดหมู่ "รายการเอกสาร"
             // ------------------------------------
             if (currentSystemMode === 'document') {
-                grid.className = "grid grid-cols-1 md:grid-cols-2 gap-4"; // แบ่งเป็น 2 คอลัมน์
+                grid.className = "grid grid-cols-1 md:grid-cols-2 gap-4"; 
                 
-                // --- ปรับเปลี่ยนชื่อรายการและกำหนดไฟล์ที่จะให้ลิงก์ไป ---
+                // คืนชีพ 10 รายการกลับมาแล้วครับ!
                 const docItems = [
-                    { 
-                        name: "เอกสาร", 
-                        img: imgMakeup, 
-                        link: "https://hy-c9.github.io/-HY/" 
-                    },
-                    { 
-                        name: "เอกสาร", 
-                        img: imgSmartContract, 
-                        link: " "
-                    }
+                    { name: "เอกสารขยายเวลา", img: imgMakeup, link: "ใส่ลิงก์ของคุณที่นี่_1" },
+                    { name: "เอกสารขยายเวลา", img: imgSmartContract, link: "ใส่ลิงก์ของคุณที่นี่_2" },
+                    { name: "เอกสาร", img: imgMakeup, link: "ใส่ลิงก์ของคุณที่นี่_3" },
+                    { name: "เอกสาร", img: imgSmartContract, link: "ใส่ลิงก์ของคุณที่นี่_4" },
+                    { name: "เอกสาร", img: imgMakeup, link: "ใส่ลิงก์ของคุณที่นี่_5" },
+                    { name: "เอกสาร", img: imgSmartContract, link: "ใส่ลิงก์ของคุณที่นี่_6" },
+                    { name: "เอกสาร", img: imgMakeup, link: "ใส่ลิงก์ของคุณที่นี่_7" },
+                    { name: "เอกสาร", img: imgSmartContract, link: "ใส่ลิงก์ของคุณที่นี่_8" },
+                    { name: "เอกสาร", img: imgMakeup, link: "ใส่ลิงก์ของคุณที่นี่_9" },
+                    { name: "เอกสาร", img: imgSmartContract, link: "ใส่ลิงก์ของคุณที่นี่_10" }
                 ];
                 
                 docItems.forEach((item) => {
-                    // กำหนดคำสั่งเวลาปุ่มโดนกด: ถ้ามีลิงก์ให้เปิดแท็บใหม่ ถ้าไม่มีให้แจ้งเตือน
-                    let btnAction = item.link !== "#" 
+                    let btnAction = (item.link && !item.link.includes("ใส่ลิงก์ของคุณที่นี่")) 
                         ? `window.open('${item.link}', '_blank')` 
-                        : `alert('ระบบเอกสารนี้กำลังอยู่ระหว่างการพัฒนา')`;
+                        : `alert('ระบบเอกสารนี้ยังไม่ได้ใส่ลิงก์')`;
 
                     grid.innerHTML += `
-                        <div class="bg-slate-800/80 backdrop-blur rounded-xl p-4 flex items-center justify-between border border-slate-600 shadow-md hover:bg-slate-700 transition-colors">
+                        <div class="bg-[#1e293b] rounded-xl p-4 flex items-center justify-between border border-slate-700 shadow-md hover:bg-slate-800 transition-colors">
                             <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 bg-white rounded-lg p-1 flex-shrink-0 shadow-sm overflow-hidden">
-                                    <img src="${item.img}" class="w-full h-full object-cover rounded-[6px]">
+                                <div class="w-14 h-14 bg-white rounded-lg p-1.5 flex flex-shrink-0 items-center justify-center shadow-sm overflow-hidden">
+                                    <img src="${item.img}" class="max-w-full max-h-full object-contain rounded-[6px]">
                                 </div>
-                                <h3 class="text-slate-100 font-bold text-[14px] tracking-wide">${item.name}</h3>
+                                <h3 class="text-slate-100 font-bold text-[15px] tracking-wide">${item.name}</h3>
                             </div>
-                            <button onclick="${btnAction}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg shadow-sm transition-colors text-xs shrink-0 flex items-center gap-1.5">
+                            <button onclick="${btnAction}" class="bg-[#5b51d8] hover:bg-[#483fbe] text-white font-medium py-2 px-4 rounded-lg shadow-sm transition-colors text-sm shrink-0 flex items-center gap-1.5">
                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
-                                เปิดดูเอกสาร
+                                เปิด
                             </button>
                         </div>
                     `;
@@ -709,27 +391,27 @@
             }
 
             // ------------------------------------
-            // ถ้าเป็นโหมดปกติ (AI SMART CONTRACT 1 และ 2)
+            // หมวดหมู่ AI SMART CONTRACT (ปรับให้เป็น 2 คอลัมน์เหมือนในรูป)
             // ------------------------------------
-            grid.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3"; // ปรับเป็นแนวนอนเล็กลง
+            grid.className = "grid grid-cols-1 md:grid-cols-2 gap-4"; // 2 คอลัมน์
             const displayImage = (currentSystemMode === 'smart') ? imgSmartContract : imgMakeup;
 
             menuItems.forEach((item) => {
                 const isGreen = item.status === "✅";
-                const iconColor = isGreen ? "text-emerald-400" : "text-red-500";
+                const iconColor = isGreen ? "text-emerald-500" : "text-red-500";
                 let buttonAction = `openVerification('${item.status}', '${item.name}')`;
                 
                 grid.innerHTML += `
-                    <div class="bg-slate-800/80 backdrop-blur rounded-lg p-3 flex items-center justify-between border border-slate-700 shadow-sm hover:bg-slate-700/80 transition-all group">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-white rounded-md p-0.5 flex-shrink-0 shadow-sm overflow-hidden">
-                                <img src="${displayImage}" class="w-full h-full object-cover rounded-[4px] group-hover:scale-110 transition-transform duration-300">
+                    <div class="bg-[#18202F] rounded-xl p-3 flex items-center justify-between border border-slate-700 shadow-md hover:bg-slate-800 transition-all group">
+                        <div class="flex items-center gap-4">
+                            <div class="w-11 h-11 bg-white rounded-lg p-1 flex-shrink-0 flex items-center justify-center shadow-sm overflow-hidden">
+                                <img src="${displayImage}" class="max-w-full max-h-full object-contain rounded-[4px] group-hover:scale-110 transition-transform duration-300">
                             </div>
-                            <h3 class="text-slate-100 font-medium text-sm flex items-center gap-1.5">
-                                ${item.name} <span class="${iconColor} font-bold">${item.status}</span>
+                            <h3 class="text-slate-100 font-bold text-[14px] flex items-center gap-2">
+                                ${item.name} <span class="${iconColor} font-bold text-[15px] drop-shadow-sm">${item.status}</span>
                             </h3>
                         </div>
-                        <button onclick="${buttonAction}" class="bg-[#0F767D] hover:bg-[#0c5e64] text-white font-medium py-1.5 px-3 rounded-md shadow-sm transition-colors text-xs shrink-0">
+                        <button onclick="${buttonAction}" class="bg-[#0F767D] hover:bg-[#0c5e64] text-white font-medium py-1.5 px-5 rounded-lg shadow-sm transition-colors text-[13px] shrink-0">
                             เปิด
                         </button>
                     </div>
@@ -737,21 +419,9 @@
             });
         }
 
-        function showDashboard(user) {
-            stateLogin.classList.add('hidden');
-            stateVerification.classList.add('hidden');
-            stateVerification.classList.remove('flex');
-            
-            stateDashboard.classList.remove('hidden');
-            stateDashboard.classList.add('flex');
-
-            document.getElementById('dash-username').textContent = user.username;
-            document.getElementById('dash-expire-date').textContent = formatDate(user.expireAt);
-            
-            switchSystemMode(currentSystemMode);
-            startTimer();
-        }
-
+        // ==========================================
+        // 4. ระบบกดตรวจสอบ Slip
+        // ==========================================
         function openVerification(status, actionTitle) {
             currentVerificationModeIsSuccess = (status === '✅');
             currentActionName = actionTitle.replace(".", "");
@@ -776,7 +446,6 @@
             stateDashboard.classList.add('flex');
         }
 
-        // ================= 5. FORM & RESULT =================
         const form = document.getElementById('verification-form');
         const fileInput = document.getElementById('file-upload');
         const dropZoneContent = document.getElementById('drop-zone-content');
@@ -816,20 +485,6 @@
 
         form.addEventListener('submit', function(e) {
             e.preventDefault(); 
-            const currentUser = JSON.parse(localStorage.getItem('active_user'));
-            const dbUsers = DatabaseAPI.getUsers();
-            
-            let realUserData = currentUser;
-            if (dbUsers.length > 0) {
-                realUserData = dbUsers.find(u => u.username === currentUser.username);
-            }
-
-            if (!realUserData || new Date().getTime() > realUserData.expireAt) {
-                alert("License สิ้นสุดการใช้งานแล้วระหว่างทำรายการ ระบบจะทำการออกจากระบบ");
-                logoutUser();
-                return;
-            }
-
             const shopId = document.getElementById('shop-id').value;
             const file = fileInput.files[0];
             if(!shopId || !file) return alert('กรุณาวางรูปภาพ Slip ก่อนดำเนินการตรวจสอบ');
@@ -845,23 +500,19 @@
         function startAIVerification() {
             appLoadingOverlay.classList.remove('hidden');
             let progress = 0;
-            
             const totalDuration = 2000; 
             const updateInterval = 50; 
             const step = 100 / (totalDuration / updateInterval);
             
             const interval = setInterval(() => {
                 progress += step; 
-                
                 if (progress >= 100) {
                     progress = 100;
                     clearInterval(interval);
                     setTimeout(() => { showResult(); }, 100); 
                 }
-                
                 progressBar.style.width = `${progress}%`;
                 progressText.textContent = `${Math.floor(progress)}%`;
-
             }, updateInterval);
         }
 
