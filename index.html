@@ -30,18 +30,6 @@
         #initial-loader { transition: opacity 0.5s; }
         
     </style>
-
-    <script>
-        // ตรวจสอบว่ามีการล็อกอินผ่านระบบหลักมาหรือไม่
-        const currentUser = JSON.parse(localStorage.getItem('active_user'));
-        const now = new Date().getTime();
-
-        // ถ้าไม่มีข้อมูลล็อกอิน หรือเวลาหมด ให้เด้งไปที่ "ลิงก์" หน้าล็อคอินทันที
-        if (!currentUser || now > currentUser.expireAt) {
-            window.location.href = 'https://ลิงก์เว็บระบบหลักของคุณ.com'; 
-        }
-    </script>
-    </head>
 <body>
 </head>
 <body class="min-h-screen bg-slate-900 text-slate-800 overflow-x-hidden">
