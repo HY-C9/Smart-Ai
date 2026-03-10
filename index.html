@@ -408,7 +408,7 @@
                 
                 docItems.forEach((item) => {
                     let btnAction = (item.link && !item.link.includes("ใส่ลิงก์ของคุณที่นี่")) 
-                        ? `window.open('${item.link}', '_blank')` 
+                        ? `window.location.href = '${item.link}'` 
                         : `alert('หากต้องการเพิ่มเอกสาร ติดต่อเห่ายวิ้น')`;
 
                     grid.innerHTML += `
