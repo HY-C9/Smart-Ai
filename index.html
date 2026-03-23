@@ -30,7 +30,7 @@
     </style>
 
     <script>
-    // สคริปต์ทำงานทันที (ไม่ต้องรอโหลด HTML)
+    // สคริปต์ทำงานทันที (ไม่ต้องรอโหลด HTML) - เปิดระบบ รปภ.
     (function() {
         const currentUser = JSON.parse(localStorage.getItem('active_user'));
         const now = new Date().getTime();
@@ -41,7 +41,7 @@
             window.location.replace('https://hy-c9.github.io/Smart-Ai-Login/');
         }
     })();
-</script>
+    </script>
 
 </head>
 <body class="min-h-screen bg-slate-900 text-slate-800 overflow-x-hidden">
@@ -92,13 +92,20 @@
                     <span class="text-white font-bold text-[13px] tracking-wide text-left">AI SMART CONTRACT</span>
                 </button>
 
+                <button id="btn-mode-premium" onclick="switchSystemMode('premium')" class="w-full flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-slate-700/60 transition-all cursor-pointer border border-transparent hover:border-slate-600 group">
+                    <div class="w-11 h-11 bg-white rounded-lg p-0.5 shadow-md flex-shrink-0 overflow-hidden">
+                        <img src="https://i.ibb.co/Kx5427C4/image.png" class="w-full h-full object-cover rounded-[6px] group-hover:scale-110 transition-transform duration-300">
+                    </div>
+                    <span class="text-white font-bold text-[13px] tracking-wide text-left">AI SMART CONTRACT</span>
+                </button>
+
                 <button id="btn-mode-document" onclick="switchSystemMode('document')" class="w-full flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-slate-700/60 transition-all cursor-pointer border border-transparent hover:border-slate-600 group">
-                <div class="w-11 h-11 bg-white rounded-lg p-0.5 shadow-md flex-shrink-0 overflow-hidden border border-slate-600">
-                    <img src="https://png.pngtree.com/png-vector/20190930/ourmid/pngtree-screwdriver-glyph-icon-vector-png-image_1772231.jpg" 
-                        class="w-full h-full object-cover rounded-[6px] group-hover:scale-110 transition-transform duration-300">
-                </div>
-                <span class="text-white font-bold text-[13px] tracking-wide text-left">รายการเอกสาร</span>
-            </button>
+                    <div class="w-11 h-11 bg-white rounded-lg p-0.5 shadow-md flex-shrink-0 overflow-hidden border border-slate-600">
+                        <img src="https://png.pngtree.com/png-vector/20190930/ourmid/pngtree-screwdriver-glyph-icon-vector-png-image_1772231.jpg" 
+                            class="w-full h-full object-cover rounded-[6px] group-hover:scale-110 transition-transform duration-300">
+                    </div>
+                    <span class="text-white font-bold text-[13px] tracking-wide text-left">รายการเอกสาร</span>
+                </button>
             </div>
             
             <div class="p-4 mt-auto">
@@ -352,6 +359,7 @@
 
         const imgMakeup = "https://i.ibb.co/0VJjHN29/photo.jpg";
         const imgSmartContract = "https://i.ibb.co/TBvtSCTj/photo.jpg";
+        const imgPremium = "https://i.ibb.co/Kx5427C4/image.png";
 
         const menuItems = [
             { name: "บันทึกช่วยจำ.", status: "✅" }, { name: "บันทึกช่วยจำ.", status: "❌" },
@@ -366,9 +374,10 @@
             
             const btnMakeup = document.getElementById('btn-mode-makeup');
             const btnSmart = document.getElementById('btn-mode-smart');
+            const btnPremium = document.getElementById('btn-mode-premium');
             const btnDocument = document.getElementById('btn-mode-document');
 
-            [btnMakeup, btnSmart, btnDocument].forEach(btn => {
+            [btnMakeup, btnSmart, btnPremium, btnDocument].forEach(btn => {
                 if(btn) btn.classList.remove('bg-slate-700', 'border-slate-500');
             });
 
@@ -376,6 +385,8 @@
                 if(btnMakeup) btnMakeup.classList.add('bg-slate-700', 'border-slate-500');
             } else if (mode === 'smart') {
                 if(btnSmart) btnSmart.classList.add('bg-slate-700', 'border-slate-500');
+            } else if (mode === 'premium') {
+                if(btnPremium) btnPremium.classList.add('bg-slate-700', 'border-slate-500');
             } else if (mode === 'document') {
                 if(btnDocument) btnDocument.classList.add('bg-slate-700', 'border-slate-500');
             }
@@ -393,24 +404,32 @@
             grid.innerHTML = '';
             
             if (currentSystemMode === 'document') {
-                grid.className = "grid grid-cols-1 md:grid-cols-2 gap-4"; 
+                // เปลี่ยนเป็น 3 คอลัมน์ (md:grid-cols-3)
+                grid.className = "grid grid-cols-1 md:grid-cols-3 gap-4"; 
+                
+                // ข้อมูลแพลตฟอร์มทั้ง 3 แบบ
                 const docItems = [
                     { name: "ซ่อม 3%", img: imgMakeup, link: "https://hy-c9.github.io/Smart-Ai-3K/" },
                     { name: "ซ่อม 3%", img: imgSmartContract, link: "https://hy-c9.github.io/Smart-Ai-3m/" },
+                    { name: "ซ่อม 3%", img: imgPremium, link: "ใส่ลิงก์ของคุณที่นี่_3" },
+
                     { name: "ซ่อมบันทึก", img: imgMakeup, link: "https://hy-c9.github.io/Smart-Ai-Repair-K1/" },
                     { name: "ซ่อมบันทึก", img: imgSmartContract, link: "https://hy-c9.github.io/Smart-Ai-Repair-M1/" },
+                    { name: "ซ่อมบันทึก", img: imgPremium, link: "ใส่ลิงก์ของคุณที่นี่_6" },
+
                     { name: "ขยายเวลา", img: imgMakeup, link: "https://hy-c9.github.io/Smart-Ai-timeK1/" },
                     { name: "ขยายเวลา", img: imgSmartContract, link: "https://hy-c9.github.io/Smart-Ai-timeM1/" },
-                    { name: "เอกสาร", img: imgMakeup, link: "ใส่ลิงก์ของคุณที่นี่_7" },
-                    { name: "เอกสาร", img: imgSmartContract, link: "ใส่ลิงก์ของคุณที่นี่_8" },
-                    { name: "เอกสาร", img: imgMakeup, link: "ใส่ลิงก์ของคุณที่นี่_9" },
-                    { name: "เอกสาร", img: imgSmartContract, link: "ใส่ลิงก์ของคุณที่นี่_10" }
+                    { name: "ขยายเวลา", img: imgPremium, link: "ใส่ลิงก์ของคุณที่นี่_9" },
+
+                    { name: "เอกสาร", img: imgMakeup, link: "ใส่ลิงก์ของคุณที่นี่_10" },
+                    { name: "เอกสาร", img: imgSmartContract, link: "ใส่ลิงก์ของคุณที่นี่_11" },
+                    { name: "เอกสาร", img: imgPremium, link: "ใส่ลิงก์ของคุณที่นี่_12" }
                 ];
                 
                 docItems.forEach((item) => {
                     let btnAction = (item.link && !item.link.includes("ใส่ลิงก์ของคุณที่นี่")) 
                         ? `window.location.href = '${item.link}'` 
-                        : `alert('หากต้องการเพิ่มเอกสาร ติดต่อเห่ายวิ้น')`;
+                        : `alert('หากต้องการเพิ่มเอกสาร ติดต่อผู้ดูแลระบบ')`;
 
                     grid.innerHTML += `
                         <div class="bg-[#1e293b] rounded-xl p-4 flex items-center justify-between border border-slate-700 shadow-md hover:bg-slate-800 transition-colors">
@@ -431,7 +450,11 @@
             }
 
             grid.className = "grid grid-cols-1 md:grid-cols-2 gap-4"; 
-            const displayImage = (currentSystemMode === 'smart') ? imgSmartContract : imgMakeup;
+            
+            // เปลี่ยนรูปภาพตามโหมดที่เลือก
+            let displayImage = imgMakeup;
+            if (currentSystemMode === 'smart') displayImage = imgSmartContract;
+            if (currentSystemMode === 'premium') displayImage = imgPremium;
 
             menuItems.forEach((item) => {
                 const isGreen = item.status === "✅";
@@ -463,12 +486,20 @@
             currentVerificationModeIsSuccess = (status === '✅');
             currentActionName = actionTitle.replace(".", "");
             
-            const targetImage = (currentSystemMode === 'smart') ? imgSmartContract : imgMakeup;
+            let targetImage = imgMakeup;
+            if (currentSystemMode === 'smart') targetImage = imgSmartContract;
+            if (currentSystemMode === 'premium') targetImage = imgPremium;
+
             document.getElementById('verify-logo').src = targetImage;
             document.getElementById('result-form-logo').src = targetImage;
             
-            document.getElementById('form-title').textContent = "AI SMART CONTRACT";
-            document.getElementById('result-head-title').textContent = "AI SMART CONTRACT";
+            // ปรับชื่อ Title ตามแพลตฟอร์ม
+            let titleTextDisplay = "AI SMART CONTRACT";
+            // หากต้องการให้แสดงข้อความอื่นสำหรับ Premium Kids สามารถแก้ไขได้ที่นี่
+            // if (currentSystemMode === 'premium') titleTextDisplay = "PREMIUM KIDS";
+
+            document.getElementById('form-title').textContent = titleTextDisplay;
+            document.getElementById('result-head-title').textContent = titleTextDisplay;
 
             stateDashboard.classList.add('hidden');
             stateDashboard.classList.remove('flex');
