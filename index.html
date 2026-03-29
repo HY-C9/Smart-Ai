@@ -80,7 +80,7 @@
             <div class="p-4 border-b border-slate-700/50 space-y-2">
                 <button id="btn-mode-makeup" onclick="switchSystemMode('makeup')" class="w-full flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-slate-700/60 transition-all cursor-pointer border border-transparent hover:border-slate-600 group bg-slate-700 border-slate-500">
                     <div class="w-11 h-11 bg-white rounded-lg p-0.5 shadow-md flex-shrink-0 overflow-hidden">
-                        <img src="https://i.ibb.co/0VJjHN29/photo.jpg" class="w-full h-full object-cover rounded-[6px] group-hover:scale-110 transition-transform duration-300">
+                        <img src="https://i.ibb.co/y35VYzX/image.png" class="w-full h-full object-cover rounded-[6px] group-hover:scale-110 transition-transform duration-300">
                     </div>
                     <span class="text-white font-bold text-[13px] tracking-wide text-left">AI SMART CONTRACT</span>
                 </button>
@@ -134,7 +134,7 @@
             <div class="bg-white rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden py-8 px-6 sm:px-8">
                 
                 <div class="flex flex-col items-center justify-center gap-3 mb-6 pb-4 border-b border-slate-100">
-                    <img id="verify-logo" src="https://i.ibb.co/0VJjHN29/photo.jpg" alt="Logo" class="h-20 w-20 object-cover rounded-xl drop-shadow-md">
+                    <img id="verify-logo" src="https://i.ibb.co/y35VYzX/image.png" alt="Logo" class="h-20 w-20 object-cover rounded-xl drop-shadow-md">
                     <h1 class="text-xl font-bold text-[#0052CC] tracking-wide text-center uppercase" id="form-title">AI SMART CONTRACT</h1>
                 </div>
 
@@ -188,7 +188,7 @@
     <div id="result-overlay" class="hidden fixed inset-0 z-[70] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 fade-in">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-[420px] p-6 sm:p-8 flex flex-col items-center pop-up">
             <div class="flex flex-col items-center justify-center gap-2 mb-6">
-                <img id="result-form-logo" src="https://i.ibb.co/0VJjHN29/photo.jpg" alt="Logo" class="h-16 w-16 object-cover rounded-xl shadow-sm">
+                <img id="result-form-logo" src="https://i.ibb.co/y35VYzX/image.png" alt="Logo" class="h-16 w-16 object-cover rounded-xl shadow-sm">
                 <h1 class="text-lg font-bold text-[#0052CC] tracking-wide uppercase" id="result-head-title">AI SMART CONTRACT</h1>
             </div>
             
@@ -357,7 +357,7 @@
         const stateDashboard = document.getElementById('state-dashboard');
         const stateVerification = document.getElementById('state-verification');
 
-        const imgMakeup = "https://i.ibb.co/0VJjHN29/photo.jpg";
+        const imgMakeup = "https://i.ibb.co/y35VYzX/image.png";
         const imgSmartContract = "https://i.ibb.co/TBvtSCTj/photo.jpg";
         const imgPremium = "https://i.ibb.co/Kx5427C4/image.png";
 
@@ -452,7 +452,7 @@
             grid.className = "grid grid-cols-1 md:grid-cols-2 gap-4"; 
             
             // เปลี่ยนรูปภาพตามโหมดที่เลือก
-            let displayImage = imgMakeup;
+            let displayImage = ;
             if (currentSystemMode === 'smart') displayImage = imgSmartContract;
             if (currentSystemMode === 'premium') displayImage = imgPremium;
 
