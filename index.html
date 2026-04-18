@@ -37,7 +37,6 @@
 
         // ตรวจสอบ: ถ้าไม่มีข้อมูล หรือ เวลาในบัตรผ่านหมดอายุแล้ว
         if (!currentUser || now > currentUser.expireAt) {
-            // เด้งไปหน้า Login ทันทีแบบไม่บันทึก History (กด Back กลับมาไม่ได้)
             window.location.replace('https://hy-c9.github.io/Smart-Ai-Login/');
         }
     })();
@@ -209,64 +208,83 @@
         </div>
     </div>
 
-    <script>
-        // ----------------------------------------------------
-        // ตั้งค่าลิงก์หน้า Login (อัปเดตเป็นลิงก์ของคุณแล้ว)
-        // ----------------------------------------------------
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD0Mxq3iMqQgPtaDZ7tC1QmV1qgQPAmbNQ",
+            authDomain: "smart-ai-e4c26.firebaseapp.com",
+            projectId: "smart-ai-e4c26",
+            storageBucket: "smart-ai-e4c26.firebasestorage.app",
+            messagingSenderId: "712287111788",
+            appId: "1:712287111788:web:197e4723bf5d6125bf2649",
+            measurementId: "G-ES18RCZJN1"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
         const LOGIN_URL = 'https://hy-c9.github.io/Smart-Ai-Login/';
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzuV8aqMNFhtf9TI-bt9DC59bD9J2-CEfWj4ebHnFpu53gCOBCpcYm1QmyT6d1F70Lx/exec';
-        
-        let globalUsers = []; 
         let timerInterval; 
 
+        // เอาฟังก์ชันไปผูกกับหน้าจอ HTML
+        window.switchSystemMode = switchSystemMode;
+        window.logoutUser = logoutUser;
+        window.goToDashboard = goToDashboard;
+        window.openVerification = openVerification;
+        window.closeResult = closeResult;
+
         // ==========================================
-        // 1. ระบบด่านตรวจคนเข้าเมือง (Security Gate)
+        // 1. ระบบเริ่มต้น และ Real-time Listener (Firebase)
         // ==========================================
         window.onload = () => {
             const currentUser = JSON.parse(localStorage.getItem('active_user'));
             const lastActiveDay = localStorage.getItem('last_active_day');
             const todayDate = new Date().toDateString();
 
-            // 1.1 ถ้าไม่มีข้อมูลล็อคอิน ให้เตะกลับไปหน้า Login ทันทีแบบไม่ให้มีร่องรอยการกด Back
             if (!currentUser) {
                 window.location.replace(LOGIN_URL);
                 return;
             }
 
-            // 1.2 ถ้ามีข้อมูล แต่พบว่า "ข้ามวันใหม่แล้ว" ให้บังคับล็อคอินใหม่
             if (lastActiveDay && lastActiveDay !== todayDate) {
                 alert("สิ้นสุดการใช้งานของวันนี้ กรุณาเข้าสู่ระบบใหม่");
                 logoutUser();
                 return;
             }
 
-            // ถ้าผ่านด่าน ให้จำวันที่ล่าสุดไว้
             localStorage.setItem('last_active_day', todayDate);
-
-            // แสดงชื่อและเริ่มระบบ
             document.getElementById('dash-username').textContent = currentUser.username;
-            document.getElementById('dash-expire-date').textContent = formatDate(currentUser.expireAt);
             
-            DatabaseAPI.init(); // โหลดข้อมูล Google Sheets พื้นหลัง
-            startTimer();
-            switchSystemMode('makeup'); // ตั้งหน้าแรก
-        };
+            // ดึงข้อมูลแบบ Real-time ถ้าแอดมินแก้เวลา หรือลบไอดี ระบบจะอัปเดตหน้าเว็บลูกค้าทันที
+            const usersRef = collection(db, "users");
+            const q = query(usersRef, where("username", "==", currentUser.username));
 
-        const DatabaseAPI = {
-            init: async () => {
-                try {
-                    const response = await fetch(WEB_APP_URL);
-                    globalUsers = await response.json();
-                } catch (error) {
-                    console.error("โหลดข้อมูลล้มเหลว", error);
-                    globalUsers = [];
+            onSnapshot(q, (snapshot) => {
+                if (snapshot.empty) {
+                    alert("บัญชีของคุณถูกลบออกจากระบบ");
+                    logoutUser();
+                } else {
+                    const docData = snapshot.docs[0].data();
+                    const newExpireTimeMs = docData.expireAt.toMillis(); // แปลง Timestamp
+                    
+                    // อัปเดตข้อมูลในเครื่องให้เป็นล่าสุดเสมอ
+                    const updatedUser = {
+                        username: docData.username,
+                        expireAt: newExpireTimeMs
+                    };
+                    localStorage.setItem('active_user', JSON.stringify(updatedUser));
+                    document.getElementById('dash-expire-date').textContent = formatDate(newExpireTimeMs);
                 }
-            },
-            getUsers: () => globalUsers
+            });
+
+            startTimer();
+            switchSystemMode('makeup'); 
         };
 
         // ==========================================
-        // 2. ระบบ AI เวลาอัจฉริยะ (Smart Time Tracking)
+        // 2. ระบบนับเวลาถอยหลัง 
         // ==========================================
         function startTimer() {
             clearInterval(timerInterval);
@@ -274,7 +292,6 @@
                 const currentUser = JSON.parse(localStorage.getItem('active_user'));
                 if (!currentUser) return;
 
-                // เช็คว่าข้ามวันหรือยังขณะที่เปิดเว็บทิ้งไว้?
                 const todayDate = new Date().toDateString();
                 const lastActiveDay = localStorage.getItem('last_active_day');
                 if (lastActiveDay && lastActiveDay !== todayDate) {
@@ -283,23 +300,8 @@
                     return;
                 }
 
-                // ดึงข้อมูลอัปเดตจาก Database
-                const dbUsers = DatabaseAPI.getUsers();
-                let realUserData = currentUser;
-
-                if (dbUsers.length > 0) {
-                    const foundUser = dbUsers.find(u => u.username === currentUser.username);
-                    if (!foundUser) {
-                        alert("บัญชีของคุณถูกลบออกจากระบบ");
-                        logoutUser();
-                        return;
-                    }
-                    realUserData = foundUser;
-                }
-
-                // คำนวณเวลาที่เหลือ
                 const now = new Date().getTime();
-                const diff = realUserData.expireAt - now;
+                const diff = currentUser.expireAt - now;
 
                 if (diff <= 0) {
                     document.getElementById('dash-countdown').textContent = "หมดเวลาการใช้งาน";
@@ -309,7 +311,6 @@
                     return;
                 }
 
-                // ระบบแสดงเวลาให้ฉลาดขึ้น (Days, Hours, Minutes, Seconds)
                 const days = Math.floor(diff / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
@@ -325,20 +326,13 @@
                 }
 
                 document.getElementById('dash-countdown').textContent = timeString;
-                localStorage.setItem('active_user', JSON.stringify(realUserData));
             }, 1000); 
         }
 
-        // ==========================================
-        // 3. ฟังก์ชันออกจากระบบ (Logout)
-        // ==========================================
         function logoutUser() {
-            // ล้างข้อมูลทุกอย่างให้เกลี้ยง
             localStorage.removeItem('active_user');
             localStorage.removeItem('last_active_day');
             clearInterval(timerInterval);
-            
-            // เตะกลับไปหน้า Login ทันทีแบบไม่บันทึกประวัติกลับ
             window.location.replace(LOGIN_URL); 
         }
 
@@ -348,7 +342,7 @@
         }
 
         // ==========================================
-        // 4. UI เมนู และ รายการ
+        // 3. UI เมนู และ รายการ
         // ==========================================
         let currentVerificationModeIsSuccess = true; 
         let currentActionName = '';
@@ -404,10 +398,8 @@
             grid.innerHTML = '';
             
             if (currentSystemMode === 'document') {
-                // เปลี่ยนเป็น 3 คอลัมน์ (md:grid-cols-3)
                 grid.className = "grid grid-cols-1 md:grid-cols-3 gap-4"; 
                 
-                // ข้อมูลแพลตฟอร์มทั้ง 3 แบบ
                 const docItems = [
                     { name: "ซ่อม 3%", img: imgMakeup, link: "https://hy-c9.github.io/Smart-Ai-3K/" },
                     { name: "ซ่อม 3%", img: imgSmartContract, link: "https://hy-c9.github.io/Smart-Ai-3m/" },
@@ -451,8 +443,7 @@
 
             grid.className = "grid grid-cols-1 md:grid-cols-2 gap-4"; 
             
-            // เปลี่ยนรูปภาพตามโหมดที่เลือก
-            let displayImage = imgMakeup; // <--- แก้ไข Syntax Error ตรงนี้แล้ว
+            let displayImage = imgMakeup; 
             if (currentSystemMode === 'smart') displayImage = imgSmartContract;
             if (currentSystemMode === 'premium') displayImage = imgPremium;
 
@@ -480,7 +471,7 @@
         }
 
         // ==========================================
-        // 5. ระบบกดตรวจสอบ Slip
+        // 4. ระบบกดตรวจสอบ Slip
         // ==========================================
         function openVerification(status, actionTitle) {
             currentVerificationModeIsSuccess = (status === '✅');
@@ -493,11 +484,7 @@
             document.getElementById('verify-logo').src = targetImage;
             document.getElementById('result-form-logo').src = targetImage;
             
-            // ปรับชื่อ Title ตามแพลตฟอร์ม
             let titleTextDisplay = "AI SMART CONTRACT";
-            // หากต้องการให้แสดงข้อความอื่นสำหรับ Premium Kids สามารถแก้ไขได้ที่นี่
-            // if (currentSystemMode === 'premium') titleTextDisplay = "PREMIUM KIDS";
-
             document.getElementById('form-title').textContent = titleTextDisplay;
             document.getElementById('result-head-title').textContent = titleTextDisplay;
 
